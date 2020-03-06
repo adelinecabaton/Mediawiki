@@ -1,0 +1,4 @@
+ubuntu-srv ansible_host=10.31.2.57 ansible_user=md3
+
+[mediawiki]
+ubuntu-srv
