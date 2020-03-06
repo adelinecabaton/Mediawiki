@@ -1,0 +1,11 @@
+---
+
+- name: Create directory livraison
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: '0755'
+    recurse: yes
+  loop:
+    -"{{mediawiki_LIVR1}}"
+    -"{{mediawiki_LIVR2}}"

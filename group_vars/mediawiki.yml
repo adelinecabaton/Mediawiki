@@ -1,0 +1,12 @@
+---
+
+mediawiki_LIVR1: /appli/projects/LIVR/01.00.00
+mediawiki_LIVR2: /appli/projects/LIVR/01.01.00
+mediawiki_apache: /appli/project/wikidevops/apache
+mediawiki_mysql: /appli/project/wikidevops/mysql
+mediawiki_log_apache: /var/project/wikidevops/log/apache
+mediawiki_log_mysql: /var/project/wikidevops/log/mysql
+php version: 5.6
+mysql_dbname: mediawiki_db
+mysql_user: mediawiki_admin
+mysql_passwd: mediawiki_passwd
