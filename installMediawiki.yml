@@ -4,6 +4,6 @@
   roles:
     - file_system
     - php
-    - apache
+    - apache2
     - mysql
     - mediawiki
