@@ -1,0 +1,141 @@
+---
+
+- name: Install mysql
+  package:
+    name: "{{item}}"
+    state: present
+  loop:
+    - mysql-server
+    - python-mysqldb
+
+- name: Create mysqld.cnf
+  copy:
+    src: mysqld.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+- name: Start mysql
+  service:
+    name: mysql
+    state: started
+
+- name: Enable MySQL
+  service:
+    name: mysql
+    enabled: yes
+
+- name: Generate new root password
+  command: openssl rand -hex 7
+  args:
+    creates: /root/.my.cnf
+  register: mysql_new_root_pass
+
+- name: Remove anonymous users
+  mysql_user:
+    name: ""
+    state: absent
+  when: mysql_new_root_pass.changed
+
+- name: Remove test database
+  mysql_db:
+    name: test
+    state: absent
+  when: mysql_new_root_pass.changed
+
+- name: Output new root password
+  debug:
+    msg: "New root password is {{mysql_new_root_pass.stdout}}"
+  when: mysql_new_root_pass.changed
+
+- name: Update root password
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{mysql_new_root_pass.stdout}}"
+  loop:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+  when: mysql_new_root_pass.changed
+
+- name: Create my.cnf
+  template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+  when: mysql_new_root_pass.changed
+
+- name: Create MySQL database
+  mysql_db:
+    name: "{{mysql_dbname}}"
+    state: present
+  notify: stop mysql
+
+- name: Create MySQL user
+  mysql_user:
+    name: "{{mysql_user}}"
+    host: localhost
+    password: "{{mysql_passwd}}"
+    priv: "{{mysql_dbname}}.*:ALL"
+
+
+
+##
+#""- name: Create directory and directory log MySQL
+#  file:
+#    path: "{{item}}"
+#    state: directory
+##    owner: mysql
+#    group: mysql
+#    mode: '0755'
+#    recurse: yes
+#  loop:
+#    - "{{mediawiki_log_mysql}}"
+
+#- name: Create mysqld.cnf
+#  copy:
+#    src: mysqld.cnf
+#    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+#- name : Backup folder MySQL
+#  copy:
+#    src: /var/lib/mysql
+#    dest: /var/lib/mysql.bkp
+#    mode: preserve
+#    remote_src: yes
+#  when: false
+
+#- name: Copy on new path
+#  copy:
+#    src: /var/lib/mysql
+#    dest: /appli/projects/wikidevops
+#    mode: preserve
+#    owner: mysql
+#    group: mysql
+#    remote_src: yes
+
+#- name: Remove folder MySQL
+#  file:
+#    path: /var/lib/mysql
+#    state: absent
+
+#- name: Symbolic link
+#  file:
+#    src: "{{mediawiki_mysql}}"
+#    dest: /var/lib/mysql
+#    owner: mysql
+#    group: mysql
+#    state: link
+#    force: yes
+
+#apparmor
+#- name: Copy file apparmor
+#  copy:
+#    src: files/usr.sbin.mysqld
+#    dest: /etc/apparmor.d/usr.sbin.mysqld
+#  notify: reload apparmor
+
+#- name: Add alias Apparmor
+#  copy:
+#    src: files/alias
+#    dest: /etc/apparmor.d/tunables/alias
+#  notify: reload apparmor
