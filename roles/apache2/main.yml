@@ -1,0 +1,32 @@
+---
+
+- name: Install apache2
+  package:
+    name: apache2
+    state: present
+
+- name: Stop apache2 & php-fpm
+  service:
+    name: "{{item}}"
+    state: stopped
+  loop:
+    - apache2
+    - "php{{php_versionv1}}-fpm.service"
+
+- name: Change UID www-data
+  user:
+    name: www-data
+    uid: 1101
+
+- name: Change GID www-data
+  group:
+    name: www-data
+    gid: 1100
+
+- name: Start apache2 & php-fpm
+  service:
+    name: "{{item}}"
+    state: started
+  loop:
+    - apache2
+    - "php{{php_versionv1}}-fpm.service"
