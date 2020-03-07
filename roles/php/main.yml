@@ -1,0 +1,32 @@
+---
+
+- name: Add the ondrej PHP PPA
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+    update_cache: yes
+
+- name: Install php
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "php{{php_versionv1}}"
+    - "php{{php_versionv1}}-fpm"
+    - "php{{php_versionv1}}-mysql"
+    - "php{{php_versionv1}}-xml"
+    - "php{{php_versionv1}}-gd"
+    - "php{{php_versionv1}}-mbstring"
+
+- apache2_module:
+    state : present
+    name: "{{item}}"
+  loop:
+    - proxy_fcgi
+    - setenvif
+  notify: Restart apache2
+
+- meta: flush_handlers
+
+- name: Enabling conf
+  command: a2enconf "php{{php_versionv1}}-fpm.conf"
+  notify: Restart apache2
