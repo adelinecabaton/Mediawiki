@@ -1,0 +1,34 @@
+---
+
+- name: Create directory livraison
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: '0755'
+    recurse: yes
+  loop:
+    -"{{mediawiki_LIVR1}}"
+    -"{{mediawiki_LIVR2}}"
+
+- name: Create directory and directory log Apache
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+    recurse: yes
+  loop:
+    -"{{mediawiki_apache}}"
+    -"{{mediawiki_log_apache}}"
+
+ - name: Create directory conf machine
+   file:
+     path: /etc/conf_machine
+     state: directory
+
+  - name: Fichier de signature
+    file:
+      path: /etc/conf_machine/md3_mediawiki_1.24.2_linux_ubu18
+      state: touch
+      mode: '0644'
