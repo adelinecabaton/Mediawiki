@@ -2,13 +2,10 @@
 
 - name: Create directory livraison
   file:
-    path: "{{item}}"
+    path: /appli/projects/LIVR/01.00.00
     state: directory
     mode: '0755'
     recurse: yes
-  loop:
-    -/appli/projects/LIVR/01.00.00
-    -/appli/projects/LIVR/01.01.00
 
 - name: Create directory and directory log Apache
   file:
