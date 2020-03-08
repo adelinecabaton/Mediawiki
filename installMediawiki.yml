@@ -1,6 +1,6 @@
 ---
 
-- hosts: Mediawiki
+- hosts: mediawiki
   roles:
     - file_system
     - php
