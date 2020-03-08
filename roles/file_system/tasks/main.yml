@@ -7,8 +7,8 @@
     mode: '0755'
     recurse: yes
   loop:
-    -"{{mediawiki_LIVR1}}"
-    -"{{mediawiki_LIVR2}}"
+    -"{{/appli/projects/LIVR/01.00.00}}"
+    -"{{/appli/projects/LIVR/01.01.00}}"
 
 - name: Create directory and directory log Apache
   file:
@@ -19,8 +19,8 @@
     mode: '0755'
     recurse: yes
   loop:
-    -"{{mediawiki_apache}}"
-    -"{{mediawiki_log_apache}}"
+    -"{{/appli/projects/wikidevops/apache}}"
+    -"{{/var/projects/wikidevops/log/apache}}"
 
 - name: Create directory conf machine
   file:
