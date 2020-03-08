@@ -22,13 +22,13 @@
     -"{{mediawiki_apache}}"
     -"{{mediawiki_log_apache}}"
 
- - name: Create directory conf machine
-   file:
-     path: /etc/conf_machine
-     state: directory
+- name: Create directory conf machine
+  file:
+    path: /etc/conf_machine
+    state: directory
 
-  - name: Fichier de signature
-    file:
-      path: /etc/conf_machine/md3_mediawiki_1.24.2_linux_ubu18
-      state: touch
-      mode: '0644'
+- name: Fichier de signature
+  file:
+    path: /etc/conf_machine/md3_mediawiki_1.24.2_linux_ubu18
+    state: touch
+    mode: '0644'
