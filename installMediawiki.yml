@@ -1,9 +1,8 @@
 ---
 
-- hosts: mediawiki
+- hosts: Mediawiki
   roles:
     - file_system
     - php
     - apache2
     - mysql
-    
